@@ -1,53 +1,89 @@
-# AI Collab Office
+**✅ Here is the final `README.md` content.**
 
-This repository is the central collaboration hub for all AI tools and developers.
+Copy and paste this directly into your repository:
 
-## Main Goal
-Build scalable AI-powered applications using collaborative AI workflows.
+---
 
-## AI Team Roles
+```markdown:disable-run
+# AI Collaboration Rules - Deep Learning Workflow
 
-### Cursor
-Responsible for:
-- coding
-- debugging
-- refactoring
-- project setup
+**Strict AI Collaboration Roadmap v1**  
+**Repository Name:** ai_collaboration_office  
+**Project Type:** AI-Powered Applications with Deep Learning (Common Sense Reasoning)
 
-### Claude
-Responsible for:
-- planning
-- architecture
-- system design
-- reasoning
+## Core Philosophy
+- Laptop is the main workspace. Phone is only for checking status and testing.
+- All communication, updates, and collaboration must happen inside this repository: **ai_collaboration_office**
+- All AIs must follow the rules in this README.md strictly with no additions or removals.
 
-### Lovable
-Responsible for:
-- frontend UI generation
-- design ideas
-- landing pages
+## Definition of Deep Learning
+Deep Learning in this project means the AI must demonstrate **common sense reasoning** and **deep thinking**. 
+- The AI should think step-by-step, consider edge cases, user experience, and logical consequences. 
+- The final application must have common sense intelligence — not just functions, but the ability to handle real-world scenarios intelligently.
+- When inspecting code (especially Jules), the AI must think deeply and explain its reasoning.
 
-### Vercel
-Responsible for:
-- deployment
-- hosting
-- CI/CD
+## Team & Roles (Strict Boundaries)
 
-## Development Rules
+| Stage | AI / Tool      | Designated Role                                      | Time Limit     | Restrictions |
+|-------|----------------|------------------------------------------------------|----------------|--------------|
+| 1     | Lovable        | Architect & Planner + Deep Learning Design           | 30 mins        | Only planning, structure, and deep learning architecture |
+| 2     | Jules          | Main Executor + Bug Inspector                        | 30 mins        | Implementation + bug fixing (only one allowed to inspect bugs) |
+| 3     | Cursor         | Polish & Code Refinement                             | 30 mins        | Only final code cleaning, formatting, and small improvements |
+| -     | Codex          | Secondary Code Reviewer & Alternative Executor       | As needed      | Only when explicitly instructed |
+| -     | Supabase       | Database, Auth & Backend Management                  | As needed      | Only Supabase related tasks |
+| -     | Vercel         | Deployment & Preview Hosting                         | Automatic      | Only deployment and preview links |
+| -     | VS Code        | Human Monitoring & Final Review                      | -              | Used by human only |
+| -     | GitHub         | Version Control & Communication Hub                  | -              | Central repo: ai_collaboration_office |
 
-1. Always document changes.
-2. Keep code modular.
-3. Use clean architecture.
-4. Never delete core files without backup.
-5. Update TASKS.md after major changes.
+## Strict Rules
 
-## Tech Stack
+1. **Repository Rule**  
+   - All work and communication must be done inside **ai_collaboration_office**.
 
-- Next.js
-- TailwindCSS
-- Supabase
-- Vercel
+2. **Time Limit**  
+   - Each AI has exactly 30 minutes per stage.
 
-## Current Objective
+3. **Deep Learning Requirement**  
+   - Every app and every major feature must include meaningful deep learning (common sense reasoning and deep thinking).
 
-Build an AI automation dashboard platform.
+4. **Notification Rules**  
+   - If task will take longer than 30 minutes → Notify in GitHub and stop.  
+   - If token shortage → Notify in GitHub, stop operation, and auto continue when tokens are available again.
+
+5. **Vercel Rules**  
+   - Only update the deployment. No file deletion.  
+   - Avoid double deployments.  
+   - Must always provide Vercel Preview link.
+
+6. **Branching Rule**  
+   - Do not create new branch unless explicitly instructed.
+
+7. **App Structure**  
+   - Each new app must be created in its own separate folder.
+
+## Fixed Workflow Sequence
+
+**Stage 1:** Lovable (30 mins) – Plan with deep reasoning  
+**Stage 2:** Jules (30 mins) – Execute + Bug Inspection with deep thinking  
+**Stage 3:** Cursor (30 mins) – Polish code  
+
+Then Human reviews in VS Code and tests on Vercel via phone.
+
+## Commit Message Format
+- `LOVABLE: [description]`
+- `JULES: [description]`
+- `CURSOR: [description]`
+
+## How to Start a New App
+
+Tell **Lovable**:
+> "Follow the rules in README.md strictly inside repository ai_collaboration_office. Create a new app named [App Name] in its own folder. Use deep learning (common sense reasoning) in every step. [Describe what the app should do]."
+
+---
+
+**Ready to use.**  
+
+I-upload mo na ito sa iyong repository na **ai_collaboration_office**. Kapag naka-upload na, sabihin mo sa akin para tulungan kitang gumawa ng unang instruction kay Lovable.
+
+Gusto mo na bang gumawa ng unang app? Sabihin mo lang.
+```
