@@ -87,3 +87,8 @@ I-upload mo na ito sa iyong repository na **ai_collaboration_office**. Kapag nak
 
 Gusto mo na bang gumawa ng unang app? Sabihin mo lang.
 ```
+
+## New Project Details
+- **Project Name:** AI Collaboration Office
+- **Project ID:** mvldbqmlccrnwxmevqhg
+- **URL:** https://mvldbqmlccrnwxmevqhg.supabase.co
