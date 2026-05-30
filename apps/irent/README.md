@@ -35,3 +35,6 @@ System auto-generates receipts, sends to tenant. Meter readings via phone camera
 
 ### 2026-05-30 — Jules
 **Jules:** Implemented 5-layer security model. Fixed CodeRabbit issue by implementing the tenant invitation logic via a secure Supabase Edge Function (`invite-tenant`). Hardened RLS policies and database functions. Verified build readiness for Vercel.
+
+- Added root-level `vercel.json` and `package.json` to fix Vercel 404 deployment error and correctly route to the `irent` app.
+- Updated landing page to provide clear navigation to Owner and Tenant login.
