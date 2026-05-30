@@ -6,20 +6,21 @@
 - Environments: .env.local
 
   Creating an optimized production build ...
-✓ Compiled successfully in 4.2s
+✓ Compiled successfully in 9.2s
   Running TypeScript ...
-  Finished TypeScript in 3.7s ...
+  Finished TypeScript in 3.9s ...
   Collecting page data using 3 workers ...
-  Generating static pages using 3 workers (0/10) ...
-  Generating static pages using 3 workers (2/10)
-  Generating static pages using 3 workers (4/10)
-  Generating static pages using 3 workers (7/10)
-✓ Generating static pages using 3 workers (10/10) in 392ms
+  Generating static pages using 3 workers (0/11) ...
+  Generating static pages using 3 workers (2/11)
+  Generating static pages using 3 workers (5/11)
+  Generating static pages using 3 workers (8/11)
+✓ Generating static pages using 3 workers (11/11) in 392ms
   Finalizing page optimization ...
 
 Route (app)
 ┌ ○ /
 ├ ○ /_not-found
+├ ƒ /api/gemini
 ├ ƒ /auth/callback
 ├ ○ /login
 ├ ○ /login/tenant

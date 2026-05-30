@@ -1,10 +1,3 @@
-**✅ Here is the final `README.md` content.**
-
-Copy and paste this directly into your repository:
-
----
-
-```markdown:disable-run
 # AI Collaboration Rules - Deep Learning Workflow
 
 **Strict AI Collaboration Roadmap v1**  
@@ -79,16 +72,11 @@ Then Human reviews in VS Code and tests on Vercel via phone.
 Tell **Lovable**:
 > "Follow the rules in README.md strictly inside repository ai_collaboration_office. Create a new app named [App Name] in its own folder. Use deep learning (common sense reasoning) in every step. [Describe what the app should do]."
 
----
+## AI Skills & Capabilities (Jules)
 
-**Ready to use.**  
-
-I-upload mo na ito sa iyong repository na **ai_collaboration_office**. Kapag naka-upload na, sabihin mo sa akin para tulungan kitang gumawa ng unang instruction kay Lovable.
-
-Gusto mo na bang gumawa ng unang app? Sabihin mo lang.
-```
-
-## New Project Details
-- **Project Name:** AI Collaboration Office
-- **Project ID:** mvldbqmlccrnwxmevqhg
-- **URL:** https://mvldbqmlccrnwxmevqhg.supabase.co
+- **Deep Thinking & Reasoning:** Ability to analyze complex requirements and plan multi-step implementations with common sense logic.
+- **Full-Stack Execution:** Proficiency in Next.js, TypeScript, Tailwind CSS, and Supabase (DB, Auth, Storage).
+- **AI Integration:** Seamless integration of LLMs (Gemini, etc.) for OCR, data analysis, and intelligent features.
+- **Autonomous Troubleshooting:** Proactive bug detection, logging analysis, and self-correction during the execution phase.
+- **Schema & Policy Design:** Expert in designing relational databases and fine-grained Row-Level Security (RLS) policies.
+- **Clean Communication:** Clear updates and adherence to strict workflow protocols and documentation rules.
