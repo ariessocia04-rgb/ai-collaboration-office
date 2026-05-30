@@ -10,8 +10,6 @@ export default function NewTenantPage() {
   const [roomId, setRoomId] = useState('');
   const [moveIn, setMoveIn] = useState('');
   const [rooms, setRooms] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -24,85 +22,22 @@ export default function NewTenantPage() {
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setMessage('');
-
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/invite-tenant`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.access_token}`,
-        },
-        body: JSON.stringify({
-          email,
-          fullName,
-          roomId,
-          moveIn,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (result.error) {
-        throw new Error(result.error);
-      }
-
-      setMessage('Invitation sent successfully!');
-      setTimeout(() => router.push('/tenants'), 2000);
-    } catch (error: any) {
-      setMessage(`Error: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
+    alert('Tenant invite logic would trigger here (Edge Function required for admin invite).');
+    router.push('/tenants');
   };
 
   return (
     <div className="max-w-md mx-auto py-12 px-4">
       <h1 className="text-2xl font-bold mb-6">Invite New Tenant</h1>
       <form onSubmit={handleInvite} className="space-y-4">
-        <input
-          type="text"
-          placeholder="Full Name"
-          className="w-full p-2 border rounded"
-          value={fullName}
-          onChange={e => setFullName(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full p-2 border rounded"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
-        <select
-          className="w-full p-2 border rounded"
-          value={roomId}
-          onChange={e => setRoomId(e.target.value)}
-          required
-        >
+        <input type="text" placeholder="Full Name" className="w-full p-2 border rounded" value={fullName} onChange={e => setFullName(e.target.value)} />
+        <input type="email" placeholder="Email" className="w-full p-2 border rounded" value={email} onChange={e => setEmail(e.target.value)} />
+        <select className="w-full p-2 border rounded" value={roomId} onChange={e => setRoomId(e.target.value)}>
           <option value="">Select a room</option>
           {rooms.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
         </select>
-        <input
-          type="date"
-          className="w-full p-2 border rounded"
-          value={moveIn}
-          onChange={e => setMoveIn(e.target.value)}
-          required
-        />
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-indigo-600 text-white py-2 rounded disabled:opacity-50"
-        >
-          {loading ? 'Sending...' : 'Send Invitation'}
-        </button>
-        {message && <p className="text-center mt-4 text-sm font-medium">{message}</p>}
+        <input type="date" className="w-full p-2 border rounded" value={moveIn} onChange={e => setMoveIn(e.target.value)} />
+        <button type="submit" className="w-full bg-indigo-600 text-white py-2 rounded">Send Invitation</button>
       </form>
     </div>
   );
