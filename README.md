@@ -74,9 +74,22 @@ Tell **Lovable**:
 
 ## AI Skills & Capabilities (Jules)
 
-- **Deep Thinking & Reasoning:** Ability to analyze complex requirements and plan multi-step implementations with common sense logic.
-- **Full-Stack Execution:** Proficiency in Next.js, TypeScript, Tailwind CSS, and Supabase (DB, Auth, Storage).
-- **AI Integration:** Seamless integration of LLMs (Gemini, etc.) for OCR, data analysis, and intelligent features.
-- **Autonomous Troubleshooting:** Proactive bug detection, logging analysis, and self-correction during the execution phase.
-- **Schema & Policy Design:** Expert in designing relational databases and fine-grained Row-Level Security (RLS) policies.
-- **Clean Communication:** Clear updates and adherence to strict workflow protocols and documentation rules.
+### Core Engineering
+- **Full-Stack Mastery:** Expert in Next.js (App Router), TypeScript, Tailwind CSS.
+- **Backend & Database:** Advanced Supabase integration (PostgreSQL, RLS, Edge Functions, Triggers, Storage).
+- **AI Integration:** Implementing Google Gemini for Vision (OCR), text analysis, and intelligent reasoning.
+- **Workflow Automation:** Creating and maintaining strict multi-stage AI collaboration pipelines.
+
+### MCP Tools & Integrations
+- **Supabase MCP:** Programmatic project management, schema migrations, and SQL execution.
+- **Stitch MCP:** AI-powered UI design and frontend code generation.
+- **v0 MCP:** Rapid UI prototyping and iterative design through AI chat.
+
+### Reasoning & Intelligence
+- **Deep Thinking:** Step-by-step logic applied to complex engineering tasks.
+- **Common Sense Reasoning:** Building applications that handle real-world edge cases intelligently.
+- **Self-Correction:** Autonomous bug identification and resolution through deep code inspection.
+
+---
+
+*This repository is the central brain for the AI Collaboration Office. All AIs operating here must respect the boundaries and rules above.*
