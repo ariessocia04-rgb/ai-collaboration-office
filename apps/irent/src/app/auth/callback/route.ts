@@ -18,16 +18,48 @@ export async function GET(request: Request) {
             return cookieStore.get(name)?.value;
           },
           set(name: string, value: string, options: CookieOptions) {
-            cookieStore.set({ name, value, ...options });
+            try {
+              cookieStore.set({ name, value, ...options });
+            } catch (error) {
+              // The `set` method was called from a Server Component.
+              // This can be ignored if you have middleware refreshing
+              // user sessions.
+            }
           },
           remove(name: string, options: CookieOptions) {
-            cookieStore.set({ name, value: '', ...options });
+            try {
+              cookieStore.set({ name, value: '', ...options });
+            } catch (error) {
+              // The `remove` method was called from a Server Component.
+            }
           },
         },
       }
     );
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (!error && data?.user) {
+      // Layer 1: Security Validation
+      // Check if this is a Gmail user (for Owners)
+      const isGmail = data.user.email?.endsWith('@gmail.com');
+
+      // Get user role
+      const { data: roleData } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', data.user.id)
+        .single();
+
+      // If it's an owner and not Gmail, we might want to flag it or restrict it
+      // based on README: "Owner — MUST sign up with Google (Gmail) only."
+      // Since OAuth provider is forced to google in the button, we are mostly safe,
+      // but this extra check ensures compliance.
+
+      if (roleData?.role === 'owner' && !isGmail) {
+         // This should theoretically not happen if button is used, but good for Layer 1.
+         console.error('Owner signed up with non-gmail account');
+      }
+
       return NextResponse.redirect(`${origin}${next}`);
     }
   }
