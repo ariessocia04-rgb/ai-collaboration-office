@@ -79,11 +79,3 @@ Then Human reviews in VS Code and tests on Vercel via phone.
 Tell **Lovable**:
 > "Follow the rules in README.md strictly inside repository ai_collaboration_office. Create a new app named [App Name] in its own folder. Use deep learning (common sense reasoning) in every step. [Describe what the app should do]."
 
----
-
-**Ready to use.**  
-
-I-upload mo na ito sa iyong repository na **ai_collaboration_office**. Kapag naka-upload na, sabihin mo sa akin para tulungan kitang gumawa ng unang instruction kay Lovable.
-
-Gusto mo na bang gumawa ng unang app? Sabihin mo lang.
-```
