@@ -4,8 +4,23 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 
+type Tenancy = {
+  id: string;
+  move_in: string | null;
+  rooms?: Array<{
+    name: string;
+    properties?: Array<{
+      name: string;
+    }> | null;
+  }> | null;
+  tenancy_terms: Array<{
+    id: string;
+    snapshot: unknown;
+  }>;
+};
+
 export default function WelcomePage() {
-  const [tenancy, setTenancy] = useState<any>(null);
+  const [tenancy, setTenancy] = useState<Tenancy | null>(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [policyAccepted, setPolicyAccepted] = useState(false);
   const router = useRouter();
@@ -15,7 +30,7 @@ export default function WelcomePage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
       const { data } = await supabase.from('tenancies').select('id, move_in, rooms(name, properties(name)), tenancy_terms(id, snapshot)').eq('tenant_id', user.id).single();
-      if (data) setTenancy(data);
+      if (data) setTenancy(data as unknown as Tenancy);
     }
     fetchTenancy();
   }, []);

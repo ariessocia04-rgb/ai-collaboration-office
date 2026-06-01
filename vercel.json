@@ -1,0 +1,5 @@
+{
+  "buildCommand": "cd apps/irent && npm run build",
+  "outputDirectory": "apps/irent/.next",
+  "installCommand": "cd apps/irent && npm install"
+}

@@ -4,12 +4,17 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 
+type Room = {
+  id: string;
+  name: string;
+};
+
 export default function NewTenantPage() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [roomId, setRoomId] = useState('');
   const [moveIn, setMoveIn] = useState('');
-  const [rooms, setRooms] = useState<any[]>([]);
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const router = useRouter();
@@ -30,6 +35,10 @@ export default function NewTenantPage() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
 
+      if (!session?.access_token) {
+        throw new Error('You must be signed in to invite a tenant.');
+      }
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/invite-tenant`, {
         method: 'POST',
         headers: {
@@ -44,7 +53,7 @@ export default function NewTenantPage() {
         }),
       });
 
-      const result = await response.json();
+      const result = await response.json() as { error?: string };
 
       if (result.error) {
         throw new Error(result.error);
@@ -52,8 +61,9 @@ export default function NewTenantPage() {
 
       setMessage('Invitation sent successfully!');
       setTimeout(() => router.push('/tenants'), 2000);
-    } catch (error: any) {
-      setMessage(`Error: ${error.message}`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unable to send invitation.';
+      setMessage(`Error: ${message}`);
     } finally {
       setLoading(false);
     }
