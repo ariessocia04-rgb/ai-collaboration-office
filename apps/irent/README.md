@@ -38,3 +38,6 @@ System auto-generates receipts, sends to tenant. Meter readings via phone camera
 
 - Added root-level `vercel.json` and `package.json` to fix Vercel 404 deployment error and correctly route to the `irent` app.
 - Updated landing page to provide clear navigation to Owner and Tenant login.
+
+### 2026-06-02 — Jules
+**Jules:** Implemented the Owner Dashboard with 'Deep Learning' (Common Sense Reasoning) features. The dashboard proactively identifies utility anomalies, predicts occupancy, and prioritizes preventive maintenance based on logical reasoning.
