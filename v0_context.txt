@@ -1,0 +1,251 @@
+import Image from "next/image";
+import Link from "next/link";
+
+export default function Home() {
+  return (
+    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black min-h-screen">
+      <main className="flex flex-col w-full max-w-3xl items-center justify-center py-12 px-8 bg-white dark:bg-black sm:items-start rounded-xl shadow-lg">
+        <Image
+          className="dark:invert mb-8"
+          src="/next.svg"
+          alt="Next.js logo"
+          width={120}
+          height={24}
+          priority
+        />
+        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
+          <h1 className="text-4xl font-bold tracking-tight text-black dark:text-zinc-50">
+            IRent Management System
+          </h1>
+          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+            Welcome to the AI-powered boarding house and apartment management platform.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-4 mt-12 w-full sm:flex-row">
+          <Link
+            href="/login"
+            className="flex h-12 flex-1 items-center justify-center rounded-full bg-indigo-600 text-white transition-colors hover:bg-indigo-700 font-bold"
+          >
+            Owner Login
+          </Link>
+          <Link
+            href="/login/tenant"
+            className="flex h-12 flex-1 items-center justify-center rounded-full border border-solid border-zinc-200 px-5 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900 font-bold"
+          >
+            Tenant Login
+          </Link>
+        </div>
+
+        <div className="mt-16 pt-8 border-t border-zinc-100 dark:border-zinc-800 w-full">
+          <p className="text-sm text-zinc-500">
+            Secured with Jules 5-Layer Security Model.
+          </p>
+        </div>
+      </main>
+    </div>
+  );
+}
+'use client';
+
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+
+export default function DashboardPage() {
+  const [stats, setStats] = useState({
+    occupancy: 85,
+    pendingBills: 4,
+    urgentReports: 2,
+    monthlyRevenue: 125000,
+  });
+
+  const [insights, setInsights] = useState([
+    {
+      type: 'Utility Warning',
+      message: 'Room 302 has used 40% more electricity than their 6-month average. Possible appliance leak or unauthorized heater.',
+      reasoning: 'Common sense: Sudden spikes in usage without seasonal changes often indicate equipment failure or policy violation.'
+    },
+    {
+      type: 'Occupancy Prediction',
+      message: 'Expected 100% occupancy next month.',
+      reasoning: 'Deep thinking: Based on 3 pending move-in invitations and current low vacancy rate in the area.'
+    },
+    {
+      type: 'Maintenance Priority',
+      message: 'Replace AC filter in Room 105.',
+      reasoning: 'Preventive logic: Last maintenance was 5 months ago; replacing now prevents 3x higher repair costs in summer peak.'
+    }
+  ]);
+
+  return (
+    <div className="p-8 max-w-6xl mx-auto space-y-8">
+      <header className="flex justify-between items-end border-b pb-4">
+        <div>
+          <h1 className="text-3xl font-bold">Owner Dashboard</h1>
+          <p className="text-zinc-500">Intelligent property management</p>
+        </div>
+        <div className="text-right">
+          <span className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-bold">Jules AI: Deep Thinking Active</span>
+        </div>
+      </header>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <StatCard title="Occupancy" value={`${stats.occupancy}%`} trend="+5% vs last month" />
+        <StatCard title="Pending Bills" value={stats.pendingBills} trend="Due in 3 days" color="text-amber-600" />
+        <StatCard title="Urgent Reports" value={stats.urgentReports} trend="Needs attention" color="text-red-600" />
+        <StatCard title="Monthly Revenue" value={`₱${stats.monthlyRevenue.toLocaleString()}`} trend="+12% YoY" />
+      </div>
+
+      {/* Deep Learning Insights Section */}
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold flex items-center gap-2">
+          <span>🧠</span> Common Sense Insights
+        </h2>
+        <div className="grid grid-cols-1 gap-4">
+          {insights.map((insight, i) => (
+            <div key={i} className="border-l-4 border-indigo-600 bg-white p-6 shadow-sm rounded-r-lg space-y-2">
+              <div className="flex justify-between">
+                <h3 className="font-bold text-indigo-900">{insight.type}</h3>
+                <span className="text-xs font-mono text-zinc-400">REASONING ENGINE V1</span>
+              </div>
+              <p className="text-lg">{insight.message}</p>
+              <p className="text-sm text-zinc-500 italic bg-zinc-50 p-2 rounded">
+                <strong>Logic:</strong> {insight.reasoning}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Placeholder for Data Tables */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+        <div className="border p-6 rounded-xl bg-zinc-50 h-64 flex items-center justify-center text-zinc-400 italic">
+          Recent Transactions Chart (Placeholder)
+        </div>
+        <div className="border p-6 rounded-xl bg-zinc-50 h-64 flex items-center justify-center text-zinc-400 italic">
+          Maintenance Reports Queue (Placeholder)
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function StatCard({ title, value, trend, color = "text-black" }: any) {
+  return (
+    <div className="bg-white p-6 rounded-xl border shadow-sm">
+      <p className="text-sm text-zinc-500 font-medium">{title}</p>
+      <p className={`text-2xl font-bold ${color} my-1`}>{value}</p>
+      <p className="text-xs text-zinc-400">{trend}</p>
+    </div>
+  );
+}
+'use client';
+
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
+
+export default function NewTenantPage() {
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [roomId, setRoomId] = useState('');
+  const [moveIn, setMoveIn] = useState('');
+  const [rooms, setRooms] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const router = useRouter();
+
+  useEffect(() => {
+    async function fetchRooms() {
+      const { data } = await supabase.from('rooms').select('id, name');
+      if (data) setRooms(data);
+    }
+    fetchRooms();
+  }, []);
+
+  const handleInvite = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage('');
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/invite-tenant`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token}`,
+        },
+        body: JSON.stringify({
+          email,
+          fullName,
+          roomId,
+          moveIn,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
+      setMessage('Invitation sent successfully!');
+      setTimeout(() => router.push('/tenants'), 2000);
+    } catch (error: any) {
+      setMessage(`Error: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="max-w-md mx-auto py-12 px-4">
+      <h1 className="text-2xl font-bold mb-6">Invite New Tenant</h1>
+      <form onSubmit={handleInvite} className="space-y-4">
+        <input
+          type="text"
+          placeholder="Full Name"
+          className="w-full p-2 border rounded"
+          value={fullName}
+          onChange={e => setFullName(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full p-2 border rounded"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+        />
+        <select
+          className="w-full p-2 border rounded"
+          value={roomId}
+          onChange={e => setRoomId(e.target.value)}
+          required
+        >
+          <option value="">Select a room</option>
+          {rooms.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+        </select>
+        <input
+          type="date"
+          className="w-full p-2 border rounded"
+          value={moveIn}
+          onChange={e => setMoveIn(e.target.value)}
+          required
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-indigo-600 text-white py-2 rounded disabled:opacity-50"
+        >
+          {loading ? 'Sending...' : 'Send Invitation'}
+        </button>
+        {message && <p className="text-center mt-4 text-sm font-medium">{message}</p>}
+      </form>
+    </div>
+  );
+}

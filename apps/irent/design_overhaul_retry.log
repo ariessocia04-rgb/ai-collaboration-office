@@ -1,0 +1,11 @@
+
+> irent@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+✓ Ready in 1438ms
+
+ GET / 200 in 1214ms (next.js: 502ms, application-code: 712ms)
+ GET /dashboard 200 in 309ms (next.js: 31ms, application-code: 278ms)
