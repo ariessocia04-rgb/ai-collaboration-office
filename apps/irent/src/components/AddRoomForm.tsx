@@ -1,13 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { Room } from '@/lib/mockDb';
 
 interface AddRoomFormProps {
-  onSubmit: (data: {
-    name: string;
-    room_type: string;
-    rent_price: string;
-  }) => Promise<void>;
+  onSubmit: (data: Omit<Room, 'id'>) => void;
   onCancel: () => void;
   isLoading?: boolean;
 }
@@ -19,14 +16,22 @@ export default function AddRoomForm({
 }: AddRoomFormProps) {
   const [formData, setFormData] = useState({
     name: '',
-    room_type: '',
-    rent_price: '',
+    type: '',
+    rentPrice: 0,
+    status: 'vacant' as const,
+    utilities: '',
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(formData);
-    setFormData({ name: '', room_type: '', rent_price: '' });
+    onSubmit({
+      name: formData.name,
+      type: formData.type,
+      rentPrice: formData.rentPrice,
+      status: formData.status,
+      utilities: formData.utilities,
+    });
+    setFormData({ name: '', type: '', rentPrice: 0, status: 'vacant', utilities: '' });
   };
 
   return (
@@ -51,8 +56,8 @@ export default function AddRoomForm({
             Room Type
           </label>
           <select
-            value={formData.room_type}
-            onChange={(e) => setFormData({ ...formData, room_type: e.target.value })}
+            value={formData.type}
+            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
             required
           >
@@ -71,11 +76,24 @@ export default function AddRoomForm({
           <input
             type="number"
             placeholder="0.00"
-            value={formData.rent_price}
-            onChange={(e) => setFormData({ ...formData, rent_price: e.target.value })}
+            value={formData.rentPrice}
+            onChange={(e) => setFormData({ ...formData, rentPrice: parseFloat(e.target.value) || 0 })}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
             step="0.01"
+            min="0"
             required
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Utilities Included (optional)
+          </label>
+          <input
+            type="text"
+            placeholder="e.g., Electricity, Water"
+            value={formData.utilities}
+            onChange={(e) => setFormData({ ...formData, utilities: e.target.value })}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
           />
         </div>
         <div className="flex gap-2">
@@ -98,3 +116,4 @@ export default function AddRoomForm({
     </div>
   );
 }
+

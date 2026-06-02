@@ -1,39 +1,45 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Tenant } from '@/lib/mockDb';
 
 interface TenantFormProps {
-  roomName: string;
-  onSubmit: (data: {
-    name: string;
-    email: string;
-    password: string;
-    phone: string;
-    lease_start: string;
-    lease_end: string;
-  }) => Promise<void>;
+  roomId: string;
+  onSubmit: (data: Omit<Tenant, 'id'>) => void;
   onCancel: () => void;
+  initialData?: Tenant;
+  isEditing?: boolean;
   isLoading?: boolean;
 }
 
 export default function TenantForm({
-  roomName,
+  roomId,
   onSubmit,
   onCancel,
+  initialData,
+  isEditing = false,
   isLoading = false,
 }: TenantFormProps) {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    phone: '',
-    lease_start: '',
-    lease_end: '',
+    name: initialData?.name || '',
+    email: initialData?.email || '',
+    phone: initialData?.phone || '',
+    leaseStartDate: initialData?.leaseStartDate || new Date().toISOString().split('T')[0],
+    leaseEndDate: initialData?.leaseEndDate || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    status: initialData?.status || 'active' as const,
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(formData);
+    onSubmit({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      roomId,
+      leaseStartDate: formData.leaseStartDate,
+      leaseEndDate: formData.leaseEndDate,
+      status: formData.status,
+    });
   };
 
   return (
@@ -54,7 +60,7 @@ export default function TenantForm({
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email
+            Email Address
           </label>
           <input
             type="email"
@@ -67,24 +73,11 @@ export default function TenantForm({
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Password
-          </label>
-          <input
-            type="password"
-            placeholder="Set password for tenant"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Phone
+            Phone Number
           </label>
           <input
             type="tel"
-            placeholder="+1 (555) 123-4567"
+            placeholder="+1 (555) 000-0000"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
@@ -93,12 +86,25 @@ export default function TenantForm({
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
+            Status
+          </label>
+          <select
+            value={formData.status}
+            onChange={(e) => setFormData({ ...formData, status: e.target.value as 'active' | 'inactive' })}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
+          >
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             Lease Start Date
           </label>
           <input
             type="date"
-            value={formData.lease_start}
-            onChange={(e) => setFormData({ ...formData, lease_start: e.target.value })}
+            value={formData.leaseStartDate}
+            onChange={(e) => setFormData({ ...formData, leaseStartDate: e.target.value })}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
             required
           />
@@ -109,20 +115,21 @@ export default function TenantForm({
           </label>
           <input
             type="date"
-            value={formData.lease_end}
-            onChange={(e) => setFormData({ ...formData, lease_end: e.target.value })}
+            value={formData.leaseEndDate}
+            onChange={(e) => setFormData({ ...formData, leaseEndDate: e.target.value })}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
             required
           />
         </div>
       </div>
-      <div className="flex gap-2">
+
+      <div className="flex gap-2 pt-4">
         <button
           type="submit"
           disabled={isLoading}
           className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium disabled:bg-gray-400"
         >
-          {isLoading ? 'Adding...' : 'Add Tenant'}
+          {isLoading ? 'Saving...' : isEditing ? 'Update Tenant' : 'Add Tenant'}
         </button>
         <button
           type="button"

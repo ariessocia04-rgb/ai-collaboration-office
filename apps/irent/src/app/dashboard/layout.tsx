@@ -1,7 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
+import DashboardSidebar from '@/components/DashboardSidebar';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -11,24 +10,17 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { user: sessionUser } } = await supabase.auth.getUser();
-      if (!sessionUser) {
-        router.push('/login');
-      } else {
-        setUser(sessionUser);
-        setLoading(false);
-      }
-    };
-    checkAuth();
+    // Mock user check - in production, this would check Supabase session
+    setUser({ email: 'owner@example.com' });
+    setLoading(false);
   }, [router]);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    // Mock logout
     router.push('/login');
   };
 
@@ -37,38 +29,28 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <Link href="/dashboard" className="text-2xl font-bold text-indigo-600">
-            IRent
-          </Link>
-          <div className="flex gap-6 items-center">
-            <Link href="/dashboard" className="text-gray-700 hover:text-gray-900">
-              Dashboard
-            </Link>
-            <Link href="/dashboard/rooms" className="text-gray-700 hover:text-gray-900">
-              Rooms
-            </Link>
-            <div className="relative group">
-              <button className="text-gray-700 hover:text-gray-900">
-                {user?.email}
+    <div className="flex min-h-screen bg-gray-50">
+      <DashboardSidebar />
+      <div className="flex-1">
+        <header className="bg-white border-b border-gray-200">
+          <div className="px-8 py-4 flex justify-between items-center">
+            <h1 className="text-lg font-semibold text-gray-900">Dashboard</h1>
+            <div className="flex gap-4 items-center">
+              <span className="text-sm text-gray-600">{user?.email}</span>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
+                Sign Out
               </button>
-              <div className="hidden group-hover:block absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
-                <button
-                  onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Sign Out
-                </button>
-              </div>
             </div>
           </div>
-        </nav>
-      </header>
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {children}
-      </main>
+        </header>
+        <main className="p-8">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
+

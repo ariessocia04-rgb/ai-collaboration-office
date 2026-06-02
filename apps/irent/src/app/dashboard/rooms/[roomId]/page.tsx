@@ -1,26 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-
-interface Tenant {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  lease_start: string;
-  lease_end: string;
-  is_active: boolean;
-}
-
-interface Room {
-  id: string;
-  name: string;
-  room_type: string;
-  rent_price: number;
-}
+import { roomOperations, tenantOperations, Room, Tenant } from '@/lib/mockDb';
+import TenantForm from '@/components/TenantForm';
+import ConfirmRemoveTenant from '@/components/ConfirmRemoveTenant';
 
 export default function RoomTenantPage() {
   const params = useParams();
@@ -29,34 +14,215 @@ export default function RoomTenantPage() {
 
   const [room, setRoom] = useState<Room | null>(null);
   const [tenant, setTenant] = useState<Tenant | null>(null);
-  const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    phone: '',
-    lease_start: '',
-    lease_end: '',
-  });
-  const [creatingTenant, setCreatingTenant] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [showConfirmRemove, setShowConfirmRemove] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchRoomAndTenant();
+    loadRoomAndTenant();
   }, [roomId]);
 
-  const fetchRoomAndTenant = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+  const loadRoomAndTenant = () => {
+    const roomData = roomOperations.getRoomById(roomId);
+    if (!roomData) {
+      router.push('/dashboard/rooms');
+      return;
+    }
+    setRoom(roomData);
 
-      // Fetch room
-      const { data: roomData, error: roomError } = await supabase
-        .from('rooms')
-        .select('*')
-        .eq('id', roomId)
-        .eq('owner_id', user.id)
-        .single();
+    const tenants = tenantOperations.getTenantsByRoom(roomId);
+    if (tenants.length > 0) {
+      setTenant(tenants[0]);
+    }
+    setLoading(false);
+  };
+
+  const handleAddTenant = (tenantData: Omit<Tenant, 'id'>) => {
+    const newTenant = tenantOperations.createTenant(tenantData);
+    setTenant(newTenant);
+    setShowAddForm(false);
+  };
+
+  const handleEditTenant = (tenantData: Omit<Tenant, 'id'>) => {
+    if (tenant) {
+      const updated = tenantOperations.updateTenant(tenant.id, tenantData);
+      if (updated) {
+        setTenant(updated);
+      }
+    }
+    setShowEditForm(false);
+  };
+
+  const handleRemoveTenant = () => {
+    if (tenant) {
+      tenantOperations.removeTenant(tenant.id);
+      setTenant(null);
+      setShowConfirmRemove(false);
+      loadRoomAndTenant();
+    }
+  };
+
+  if (loading) {
+    return <div className="text-center py-12">Loading...</div>;
+  }
+
+  if (!room) {
+    return <div className="text-center py-12">Room not found</div>;
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-6">
+      <div className="flex items-center gap-4">
+        <Link
+          href="/dashboard/rooms"
+          className="text-indigo-600 hover:text-indigo-700 font-medium"
+        >
+          ← Back to Rooms
+        </Link>
+      </div>
+
+      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <h1 className="text-3xl font-bold text-gray-900">{room.name}</h1>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+          <div>
+            <p className="text-gray-600 text-sm">Room Type</p>
+            <p className="text-lg font-semibold text-gray-900">{room.type}</p>
+          </div>
+          <div>
+            <p className="text-gray-600 text-sm">Monthly Rent</p>
+            <p className="text-lg font-semibold text-gray-900">${room.rentPrice}</p>
+          </div>
+          <div>
+            <p className="text-gray-600 text-sm">Status</p>
+            <div className="mt-1">
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                room.status === 'occupied'
+                  ? 'bg-green-100 text-green-800'
+                  : 'bg-orange-100 text-orange-800'
+              }`}>
+                {room.status === 'occupied' ? 'Occupied' : 'Vacant'}
+              </span>
+            </div>
+          </div>
+          <div>
+            <p className="text-gray-600 text-sm">Utilities</p>
+            <p className="text-lg font-semibold text-gray-900">{room.utilities || 'None'}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-900">Tenant Information</h2>
+          {tenant ? (
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowEditForm(true)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              >
+                Edit Tenant
+              </button>
+              <button
+                onClick={() => setShowConfirmRemove(true)}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
+              >
+                Remove Tenant
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowAddForm(true)}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors"
+            >
+              + Add Tenant
+            </button>
+          )}
+        </div>
+
+        {tenant ? (
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-gray-600 text-sm">Name</p>
+                <p className="text-lg font-semibold text-gray-900">{tenant.name}</p>
+              </div>
+              <div>
+                <p className="text-gray-600 text-sm">Email</p>
+                <p className="text-lg font-semibold text-gray-900">{tenant.email}</p>
+              </div>
+              <div>
+                <p className="text-gray-600 text-sm">Phone</p>
+                <p className="text-lg font-semibold text-gray-900">{tenant.phone}</p>
+              </div>
+              <div>
+                <p className="text-gray-600 text-sm">Status</p>
+                <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                  tenant.status === 'active'
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-gray-100 text-gray-800'
+                }`}>
+                  {tenant.status === 'active' ? 'Active' : 'Inactive'}
+                </span>
+              </div>
+            </div>
+            <div className="pt-4 border-t border-gray-200">
+              <p className="text-gray-600 text-sm">Lease Period</p>
+              <p className="text-lg font-semibold text-gray-900">
+                {new Date(tenant.leaseStartDate).toLocaleDateString()} - {new Date(tenant.leaseEndDate).toLocaleDateString()}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="py-12 text-center">
+            <p className="text-gray-600 mb-4">No tenant assigned to this room</p>
+            {!showAddForm && (
+              <button
+                onClick={() => setShowAddForm(true)}
+                className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700"
+              >
+                Add Tenant
+              </button>
+            )}
+          </div>
+        )}
+
+        {showAddForm && (
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Add New Tenant</h3>
+            <TenantForm
+              roomId={roomId}
+              onSubmit={handleAddTenant}
+              onCancel={() => setShowAddForm(false)}
+            />
+          </div>
+        )}
+
+        {showEditForm && tenant && (
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Edit Tenant Information</h3>
+            <TenantForm
+              roomId={roomId}
+              initialData={tenant}
+              isEditing={true}
+              onSubmit={handleEditTenant}
+              onCancel={() => setShowEditForm(false)}
+            />
+          </div>
+        )}
+      </div>
+
+      <ConfirmRemoveTenant
+        isOpen={showConfirmRemove}
+        tenantName={tenant?.name || ''}
+        roomName={room.name}
+        onConfirm={handleRemoveTenant}
+        onCancel={() => setShowConfirmRemove(false)}
+      />
+    </div>
+  );
+}
+
 
       if (roomError) throw roomError;
       setRoom(roomData);
